@@ -1,6 +1,5 @@
 #:import sm kivy.uix.screenmanager
-
-
+#:import orientation plyer.orientation
 ScreenManager
     id:manager
     transition:sm.FadeTransition(duration=.0)
@@ -9,36 +8,34 @@ ScreenManager
         md_bg_color: 236/255, 236/255, 236/255, 1
         FloatLayout:
             orientation:'vertical'
-            MDIconButton:
-                icon:"segment"
-                pos_hint:{"center_x":.9,"center_y":.95}
-                user_font_size:"35"
-                on_release:
-                    #app.screen_capture("info")
-
             Front:
-                pos_hint:{'center_x':.5, 'center_y':.7}
-                MDIconButton:
-                    icon:"message"
-                    user_font_size:"100sp"
-                    theme_text_color: "Custom"
-                    text_color: 1, 1, 1, 1
-                    on_release:
-                        app.screen_capture("login")
-
-            MDLabel:
-                halign:"center"
-                text:"Send Message"
-                pos_hint:{'center_x':.5, 'center_y':.58}
+                pos_hint:{'center_x':.5, 'center_y':.85}
+                FloatLayout:
+                    MDIcon:
+                        icon:"access-point"
+                        #halign:"center"
+                        text_color: 1, 1, 1, 1
+                        font_size:"70sp"
+                        pos_hint: {"center_x": .5, "center_y": .6}
+                    MDLabel:
+                        text:"Alert!"
+                        halign:"center"
+                        pos_hint:{"center_x":.5, "center_y":.25}
             Front:
-                pos_hint:{'center_x':.5, 'center_y':.4}
-                MDIconButton:
-                    icon:"phone"
-                    user_font_size:"100sp"
-                    theme_text_color: "Custom"
-                    text_color: 1, 1, 1, 1
-                    on_release:
-                        #app.screen_capture("sell")
+                pos_hint:{'center_x':.5, 'center_y':.5}
+                size:app.size_x/3,app.size_y/6
+                FloatLayout:
+                    MDIcon:
+                        icon:"hospital-building"
+                        #halign:"center"
+                        text_color: 1, 1, 1, 1
+                        font_size:"70sp"
+                        pos_hint: {"center_x": .5, "center_y": .6}
+                    MDLabel:
+                        text:"Hospital Emergency"
+                        halign:"center"
+                        font_size:"12sp"
+                        pos_hint:{"center_x":.5, "center_y":.25}
 
             MDLabel:
                 halign:"center"
@@ -209,12 +206,16 @@ ScreenManager
     focus_behavior: False
     ripple_behavior: False
 
-<Front@MDBoxLayout>:
-    radius:20
+<Front@MDCard>:
+    radius:25
     #height:240
+    elevation:1
+    size_hint:None, None
+    shadow_softness:2
     size:app.size_x/3,app.size_y/6
-    md_bg_color:80 / 225, 136 / 225, 114 / 225, 1
+    md_bg_color:255/255, 126/255, 71/255, 1
     adaptive_height:True
+    style:"outlined"
     adaptive_width:True
 
 

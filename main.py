@@ -79,7 +79,7 @@ class MainApp(MDApp):
             SM.send_sms(number, message)
 
         else:
-            print("sms no internet")
+            print("sms.py no internet")
 
     """ REGISTRATION , VERIFICATION AND REMEMBER ME(login) """
 
