@@ -9,7 +9,7 @@ from beem import sms as SM
 from kivy.base import EventLoop
 from kivy.clock import Clock
 from kivy.core.window import Window
-from kivy.properties import StringProperty, NumericProperty
+from kivy.properties import StringProperty, NumericProperty, ListProperty
 from kivymd.app import MDApp
 from kivymd.toast import toast
 from kivymd.uix.textfield import MDTextField
@@ -21,7 +21,7 @@ Window.softinput_mode = "below_target"
 Clock.max_iteration = 250
 
 if utils.platform != 'android':
-    Window.size = [420, 740]
+    Window.size = [420, 720]
 
 
 class NumberField(MDTextField):
@@ -65,20 +65,26 @@ class NumberOnlyField(MDTextField):
 
 class MainApp(MDApp):
     size_x, size_y = Window.size
+    phone = StringProperty("")
+    numbers = ListProperty([])
 
     # APP
     screens = ['home']
     screens_size = NumericProperty(len(screens) - 1)
     current = StringProperty(screens[len(screens) - 1])
 
+
     def on_start(self):
         self.keyboard_hooker()
 
-    def send_message(self, number, message):
-        if network.ping_net():
-            SM.send_sms(number, message)
+    def add_number(self, save):
+        self.numbers.append(save)
 
+    def save_numbers(self):
+        if not self.numbers:
+            toast("add number")
         else:
+
             print("sms.py no internet")
 
     """ REGISTRATION , VERIFICATION AND REMEMBER ME(login) """
@@ -98,8 +104,26 @@ class MainApp(MDApp):
             else:
                 self.public_number = number
                 return True
+            DB.update_attendance(DB(), self.numbers)
+            toast("Number aded")
+
+    def send_message(self, sms):
+        if network.ping_net():
+            data = DB.Alert_numbers(DB())
+            for i, y in data.items():
+                self.phone = y["Phone"]
+
+                if SM.send_sms(self.phone, sms):
+                    toast("sent successful")
+
         else:
-            toast("enter phone number!")
+            print("Check ur Network")
+
+    def emergency_call(self):
+        from beem import call as CL
+        phone = "0714069014"
+
+        CL.Actions.call(CL.Actions(), phone)
 
     """ KEYBOARD INTEGRATION """
 
