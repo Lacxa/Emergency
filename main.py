@@ -1,3 +1,5 @@
+from datetime import datetime
+import json
 import re
 
 import phonenumbers
@@ -26,11 +28,6 @@ if utils.platform != 'android':
 
 class NumberField(MDTextField):
     pat = re.compile('[^0-9]')
-
-    # APP
-    screens = ['home']
-    screens_size = NumericProperty(len(screens) - 1)
-    current = StringProperty(screens[len(screens) - 1])
 
     def insert_text(self, substring, from_undo=False):
 
@@ -66,32 +63,45 @@ class NumberOnlyField(MDTextField):
 class MainApp(MDApp):
     size_x, size_y = Window.size
     phone = StringProperty("")
-    numbers = ListProperty([])
+
+    idd = StringProperty("")
 
     # APP
     screens = ['home']
     screens_size = NumericProperty(len(screens) - 1)
     current = StringProperty(screens[len(screens) - 1])
 
-
     def on_start(self):
         self.keyboard_hooker()
 
-    def add_number(self, save):
-        self.numbers.append(save)
+    def save_phone_numbers(self, phone):
+        with open("alert.json", "r") as file:
+            existing_data = json.load(file)
+            self.gen_id()
+            data = {self.idd: phone}
+            existing_data.update(data)
+        with open("alert.json", "w") as file:
+            data_dump = json.dumps(existing_data, indent=6)
+            file.write(data_dump)
+            file.close()
 
-    def save_numbers(self):
-        if not self.numbers:
-            toast("add number")
-        else:
-            DB.update_attendance(DB(), self.numbers)
-            toast("Number aded")
+    def gen_id(self):
+        timestamp = datetime.now().strftime('%d%H%f')
+        self.idd = timestamp
+
+        return self.idd
+
+    def load(self, data_file_name):
+        with open(data_file_name, "r") as file:
+            initial_data = json.load(file)
+        return initial_data
 
     def send_message(self, sms):
         if network.ping_net():
-            data = DB.Alert_numbers(DB())
+            data = self.load("alert.json")
             for i, y in data.items():
-                self.phone = y["Phone"]
+                self.phone = str(y)
+                print(self.phone)
 
                 if SM.send_sms(self.phone, sms):
                     toast("sent successful")
