@@ -105,7 +105,6 @@ class MainApp(MDApp):
 
                 if SM.send_sms(self.phone, sms):
                     toast("sent successful")
-
         else:
             print("Check ur Network")
 
