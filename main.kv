@@ -15,11 +15,8 @@ ScreenManager
                 on_release:
                     app.screen_capture("setting")
             Front:
-
-                pos_hint:{'center_x':.5, 'center_y':.85}
                 pos_hint:{'center_x':.5, 'center_y':.8}
                 size:app.size_x/3,app.size_y/6
-
                 FloatLayout:
                     MDIcon:
                         icon:"access-point"
@@ -46,13 +43,6 @@ ScreenManager
                         halign:"center"
                         font_size:"12sp"
                         pos_hint:{"center_x":.5, "center_y":.25}
-
-
-            MDLabel:
-                halign:"center"
-                text:"call"
-                pos_hint:{'center_x':.5, 'center_y':.28}
-
 
             Front:
                 pos_hint:{'center_x':.5, 'center_y':.2}
