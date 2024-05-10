@@ -8,6 +8,12 @@ ScreenManager
         md_bg_color: 236/255, 236/255, 236/255, 1
         FloatLayout:
             orientation:'vertical'
+            MDIconButton:
+                icon:"segment"
+                pos_hint:{"center_x":.9,"center_y":.95}
+                user_font_size:"35"
+                on_release:
+                    app.screen_capture("setting")
             Front:
 
                 pos_hint:{'center_x':.5, 'center_y':.85}
@@ -64,6 +70,97 @@ ScreenManager
                         halign:"center"
                         text:"call"
                         pos_hint:{'center_x':.5, 'center_y':.25}
+
+    MDScreen:
+        name:"setting"
+        FloatLayout:
+            MDIconButton:
+                icon:"arrow-left"
+                pos_hint:{"center_x":.1,"center_y":.95}
+                user_font_size:"35"
+                on_release:
+                    app.screen_capture("home")
+
+            Deco:
+                size: app.size_x/1.2, app.size_y/3.6
+                pos_hint:{"center_x":.5,"center_y":.77}
+            MDLabel:
+                text:"Alert Number"
+                halign:"center"
+                theme_text_color: "Custom"
+                font_style:"H5"
+                text_color:255/255, 126/255, 71/255, 1
+                pos_hint:{"center_x":.5,"center_y":.87}
+            NumberField:
+                id:phone_number
+                mode: "rectangle"
+                size_hint: .6, .09
+                hint_text:"Phone number:"
+                pos_hint:{'center_x':.53, 'center_y':.79}
+                font_size: dp(20)
+            MDRaisedButton:
+                id:lgs
+                text: "Add"
+                size_hint: .4, .06
+                pos_hint:{'center_x':.65, 'center_y':.69}
+                md_bg_color:255/255, 126/255, 71/255, 1
+                on_release:
+                    app.add_alert( phone_number.text)
+
+
+            Deco:
+                size: app.size_x/1.2, app.size_y/3.6
+                pos_hint:{"center_x":.5,"center_y":.46}
+            MDLabel:
+                text:"Hospital Number"
+                halign:"center"
+                theme_text_color: "Custom"
+                font_style:"H5"
+                text_color:255/255, 126/255, 71/255, 1
+                pos_hint:{"center_x":.5,"center_y":.56}
+            NumberField:
+                id:number
+                mode: "rectangle"
+                size_hint: .6, .09
+                hint_text:"Phone number:"
+                pos_hint:{'center_x':.53, 'center_y':.48}
+                font_size: dp(20)
+            MDRaisedButton:
+                id:lgs
+                text: "Add"
+                size_hint: .4, .06
+                pos_hint:{'center_x':.65, 'center_y':.38}
+                md_bg_color:255/255, 126/255, 71/255, 1
+                on_release:
+                    app.save_phone_numbers( number.text)
+
+
+            Deco:
+                size: app.size_x/1.2, app.size_y/3.6
+                pos_hint:{"center_x":.5,"center_y":.15}
+            MDLabel:
+                text:"Call Number"
+                halign:"center"
+                theme_text_color: "Custom"
+                font_style:"H5"
+                text_color:255/255, 126/255, 71/255, 1
+                pos_hint:{"center_x":.5,"center_y":.25}
+            NumberField:
+                id:sms
+                mode: "rectangle"
+                size_hint: .6, .09
+                hint_text:"Phone number:"
+                pos_hint:{'center_x':.53, 'center_y':.17}
+                font_size: dp(20)
+            MDRaisedButton:
+                id:lgs
+                text: "Add"
+                size_hint: .4, .06
+                pos_hint:{'center_x':.65, 'center_y':.07}
+                md_bg_color:255/255, 126/255, 71/255, 1
+                on_release:
+                    app.send_message( sms.text)
+
     MDScreen:
         name:"genesis"
         md_bg_color:81 / 225, 156 / 225, 114 / 225, 1
@@ -121,4 +218,3 @@ ScreenManager
     adaptive_height:True
     style:"outlined"
     adaptive_width:True
-
