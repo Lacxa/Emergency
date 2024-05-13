@@ -4,6 +4,7 @@ import re
 
 import phonenumbers
 from kivy import utils
+from kivymd.uix.card import MDCard
 
 import network
 from beem import sms as SM
@@ -24,6 +25,11 @@ Clock.max_iteration = 250
 
 if utils.platform != 'android':
     Window.size = [420, 720]
+
+
+class RowCard(MDCard):
+    icon = StringProperty("")
+    name = StringProperty("")
 
 
 class NumberField(MDTextField):
@@ -65,6 +71,7 @@ class MainApp(MDApp):
     phone = StringProperty("")
 
     idd = StringProperty("")
+    category = StringProperty("")
 
     # APP
     screens = ['home']
@@ -73,8 +80,29 @@ class MainApp(MDApp):
 
     def on_start(self):
         self.keyboard_hooker()
+        self.display_category()
 
-    def save_phone_numbers(self, phone):
+    def add_category(self, name):
+        #data = "category": name,
+        print("save !")
+        pass
+
+    def edit_message(self, sms):
+        print(sms)
+        category = self.category
+        pass
+
+    def alert_category(self):
+        print("alert category !")
+        category = self.category
+        pass
+
+    def remove_category(self):
+        print("remove category !")
+        category = self.category
+        pass
+
+    def add_phone_number(self, phone):
         with open("alert.json", "r") as file:
             existing_data = json.load(file)
             self.gen_id()
@@ -84,6 +112,17 @@ class MainApp(MDApp):
             data_dump = json.dumps(existing_data, indent=6)
             file.write(data_dump)
             file.close()
+
+    def display_category(self):
+        self.root.ids.customers.data = {}
+        self.root.ids.customers.data.append(
+            {
+                "viewclass": "RowCard",
+                "icon": "moon-full",
+                "name": "wow",
+                "id": "id"
+            }
+        )
 
     def gen_id(self):
         timestamp = datetime.now().strftime('%d%H%f')
@@ -96,14 +135,15 @@ class MainApp(MDApp):
             initial_data = json.load(file)
         return initial_data
 
-    def send_message(self, sms):
+    def alert_all(self):
         if network.ping_net():
             data = self.load("alert.json")
+            message = "I have an Emergency am at"  # + self.location
             for i, y in data.items():
                 self.phone = str(y)
-                print(self.phone)
+                #sms = message + y
 
-                if SM.send_sms(self.phone, sms):
+                if SM.send_sms(self.phone, message):
                     toast("sent successful")
         else:
             print("Check ur Network")
