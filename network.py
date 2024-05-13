@@ -3,7 +3,7 @@ import requests
 
 def ping_net():
     try:
-        code = requests.get("https://console.firebase.google.com/project/medics-inventorry/database/medics-inventorry-default-rtdb/data")
+        code = requests.get("https://google.com")
 
         print(code.status_code)
 
