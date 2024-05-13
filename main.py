@@ -83,52 +83,97 @@ class MainApp(MDApp):
         self.display_category()
 
     def add_category(self, name):
-        #data = "category": name,
-        print("save !")
-        pass
+        data = self.load("alert.json")
 
-    def edit_message(self, sms):
-        print(sms)
-        category = self.category
-        pass
+        new_category = {
+            "name": name,
+            "message": "I have an Emergency i need you help!",
+            "phone_numbers": []
+        }
+
+        data["categories"].append(new_category)
+        with open('alert.json', 'w') as file:
+            json.dump(data, file, indent=2)
+
+        toast("Successful")
+        self.display_category()
+
+    def edit_message(self, new_sms):
+        data = self.load("alert.json")
+        for category in data['categories']:
+            if category['name'] == self.category:
+                category['message'] = new_sms
+                break
+
+        with open('alert.json', 'w') as file:
+            json.dump(data, file, indent=2)
+        toast("successful")
 
     def alert_category(self):
-        print("alert category !")
-        category = self.category
-        pass
+        data = self.load("alert.json")
+
+        for category in data["categories"]:
+            if network.ping_net():
+                if category["name"] == self.category:
+                    phone_numbers = category["phone_numbers"]
+                    if not phone_numbers:
+                        toast("No phone numbers")
+                        return
+                    message = category["message"]
+                    for number in phone_numbers:
+                        if SM.send_sms(number, message):
+                            toast("sent successful")
+            else:
+                toast("check ur network")
 
     def remove_category(self):
-        print("remove category !")
-        category = self.category
-        pass
+        data = self.load("alert.json")
+
+        index_to_remove = None
+        for index, category in enumerate(data["categories"]):
+            if category["name"] == self.category:
+                index_to_remove = index
+                break
+
+        if index_to_remove is not None:
+            del data["categories"][index_to_remove]
+            with open('alert.json', 'w') as file:
+                json.dump(data, file, indent=2)
+            toast("successful")
+            self.display_category()
+            self.screen_capture("category")
+        else:
+            print("Category not found.")
 
     def add_phone_number(self, phone):
-        with open("alert.json", "r") as file:
-            existing_data = json.load(file)
-            self.gen_id()
-            data = {self.idd: phone}
-            existing_data.update(data)
-        with open("alert.json", "w") as file:
-            data_dump = json.dumps(existing_data, indent=6)
-            file.write(data_dump)
-            file.close()
+        data = self.load("alert.json")
+
+        for category in data["categories"]:
+            if category["name"] == self.category:
+                category["phone_numbers"].append(phone)
+                break
+
+        with open('alert.json', 'w') as file:
+            json.dump(data, file, indent=2)
+        toast("successful")
 
     def display_category(self):
         self.root.ids.customers.data = {}
-        self.root.ids.customers.data.append(
-            {
-                "viewclass": "RowCard",
-                "icon": "moon-full",
-                "name": "wow",
-                "id": "id"
-            }
-        )
+        data = self.load("alert.json")
+        categories = data["categories"]
+        for category in categories:
+            self.root.ids.customers.data.append(
+                {
+                    "viewclass": "RowCard",
+                    "icon": "moon-full",
+                    "name": category["name"],
+                }
+            )
 
-    def gen_id(self):
-        timestamp = datetime.now().strftime('%d%H%f')
-        self.idd = timestamp
-
-        return self.idd
+    def clear_input(self, field_id):
+        for input_field_id in ['input']:
+            input_field = self.root.ids[field_id]
+            input_field.text = ""
 
     def load(self, data_file_name):
         with open(data_file_name, "r") as file:
@@ -138,15 +183,21 @@ class MainApp(MDApp):
     def alert_all(self):
         if network.ping_net():
             data = self.load("alert.json")
-            message = "I have an Emergency am at"  # + self.location
-            for i, y in data.items():
-                self.phone = str(y)
-                #sms = message + y
+            for category in data["categories"]:
+                category_name = category["name"]
+                message = category["message"]
+                phone_numbers = category["phone_numbers"]
 
-                if SM.send_sms(self.phone, message):
-                    toast("sent successful")
+                # Send message to each phone number
+                for phone_number in phone_numbers:
+                    if SM.send_sms(phone_number, message):
+                        toast("sent successful")
+
         else:
             print("Check ur Network")
+
+    def location(self):
+        pass
 
     def emergency_call(self):
         from beem import call as CL
