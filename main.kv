@@ -8,15 +8,11 @@ ScreenManager
         md_bg_color: 236/255, 236/255, 236/255, 1
         FloatLayout:
             orientation:'vertical'
-            MDIconButton:
-                icon:"segment"
-                pos_hint:{"center_x":.9,"center_y":.95}
-                user_font_size:"35"
-                on_release:
-                    app.screen_capture("setting")
             Front:
                 pos_hint:{'center_x':.5, 'center_y':.8}
                 size:app.size_x/3,app.size_y/6
+                on_release:
+                    app.alert_all()
                 FloatLayout:
                     MDIcon:
                         icon:"access-point"
@@ -31,17 +27,18 @@ ScreenManager
             Front:
                 pos_hint:{'center_x':.5, 'center_y':.5}
                 size:app.size_x/3,app.size_y/6
+                on_release:
+                    app.screen_capture("category")
                 FloatLayout:
                     MDIcon:
-                        icon:"hospital-building"
+                        icon:"view-list"
                         #halign:"center"
                         text_color: 1, 1, 1, 1
                         font_size:"70sp"
                         pos_hint: {"center_x": .5, "center_y": .6}
                     MDLabel:
-                        text:"Hospital Emergency"
+                        text:"Category"
                         halign:"center"
-                        font_size:"12sp"
                         pos_hint:{"center_x":.5, "center_y":.25}
 
             Front:
@@ -69,40 +66,42 @@ ScreenManager
                 pos_hint:{"center_x":.1,"center_y":.95}
                 user_font_size:"35"
                 on_release:
-                    app.screen_capture("home")
+                    app.screen_capture("category")
 
             Deco:
                 size: app.size_x/1.2, app.size_y/3.6
                 pos_hint:{"center_x":.5,"center_y":.77}
             MDLabel:
-                text:"Alert Number"
+                text:"Quick Suggestion"
                 halign:"center"
                 theme_text_color: "Custom"
                 font_style:"H5"
                 text_color:255/255, 126/255, 71/255, 1
                 pos_hint:{"center_x":.5,"center_y":.87}
-            NumberField:
-                id:phone_number
-                mode: "rectangle"
-                size_hint: .6, .09
-                hint_text:"Phone number:"
-                pos_hint:{'center_x':.53, 'center_y':.79}
-                font_size: dp(20)
+
             MDRaisedButton:
                 id:lgs
-                text: "Add"
+                text: "Remove category"
                 size_hint: .4, .06
-                pos_hint:{'center_x':.65, 'center_y':.69}
+                pos_hint:{'center_x':.35, 'center_y':.8}
                 md_bg_color:255/255, 126/255, 71/255, 1
                 on_release:
-                    app.add_alert( phone_number.text)
+                    app.remove_category()
 
+            MDRaisedButton:
+                id:lgs
+                text: "Alert category"
+                size_hint: .4, .06
+                pos_hint:{'center_x':.65, 'center_y':.71}
+                md_bg_color:255/255, 126/255, 71/255, 1
+                on_release:
+                    app.alert_category()
 
             Deco:
                 size: app.size_x/1.2, app.size_y/3.6
                 pos_hint:{"center_x":.5,"center_y":.46}
             MDLabel:
-                text:"Hospital Number"
+                text:"Add Number"
                 halign:"center"
                 theme_text_color: "Custom"
                 font_style:"H5"
@@ -122,34 +121,103 @@ ScreenManager
                 pos_hint:{'center_x':.65, 'center_y':.38}
                 md_bg_color:255/255, 126/255, 71/255, 1
                 on_release:
-                    app.save_phone_numbers( number.text)
+                    app.add_phone_number( number.text)
 
 
             Deco:
                 size: app.size_x/1.2, app.size_y/3.6
                 pos_hint:{"center_x":.5,"center_y":.15}
             MDLabel:
-                text:"Call Number"
+                text:"Edit Message"
                 halign:"center"
                 theme_text_color: "Custom"
                 font_style:"H5"
                 text_color:255/255, 126/255, 71/255, 1
                 pos_hint:{"center_x":.5,"center_y":.25}
-            NumberField:
+            MDTextField:
                 id:sms
                 mode: "rectangle"
                 size_hint: .6, .09
-                hint_text:"Phone number:"
+                hint_text:"Message:"
                 pos_hint:{'center_x':.53, 'center_y':.17}
+                font_size: dp(16)
+            MDRaisedButton:
+                id:lgs
+                text: "Edit"
+                size_hint: .4, .06
+                pos_hint:{'center_x':.65, 'center_y':.07}
+                md_bg_color:255/255, 126/255, 71/255, 1
+                on_release:
+                    app.edit_message( sms.text)
+
+    MDScreen:
+        name:"add"
+        FloatLayout:
+            MDIconButton:
+                icon:"arrow-left"
+                pos_hint:{"center_x":.1,"center_y":.95}
+                user_font_size:"35"
+                on_release:
+                    app.screen_capture("category")
+
+            Deco:
+                size: app.size_x/1.2, app.size_y/3.6
+                pos_hint:{"center_x":.5,"center_y":.77}
+            MDLabel:
+                text:"New Category"
+                halign:"center"
+                theme_text_color: "Custom"
+                font_style:"H5"
+                text_color:255/255, 126/255, 71/255, 1
+                pos_hint:{"center_x":.5,"center_y":.87}
+            MDTextField:
+                id:category
+                mode: "rectangle"
+                size_hint: .6, .09
+                hint_text:"Category name:"
+                pos_hint:{'center_x':.53, 'center_y':.79}
                 font_size: dp(20)
             MDRaisedButton:
                 id:lgs
                 text: "Add"
                 size_hint: .4, .06
-                pos_hint:{'center_x':.65, 'center_y':.07}
+                pos_hint:{'center_x':.65, 'center_y':.69}
                 md_bg_color:255/255, 126/255, 71/255, 1
                 on_release:
-                    app.send_message( sms.text)
+                    app.add_category( category.text)
+
+
+    MDScreen:
+        name:"category"
+        FloatLayout:
+            MDIconButton:
+                icon:"arrow-left"
+                pos_hint:{"center_x":.1,"center_y":.95}
+                user_font_size:"35"
+                on_release:
+                    app.screen_capture("home")
+
+            MDIconButton:
+                icon:"playlist-plus"
+                pos_hint:{"center_x":.9,"center_y":.95}
+                user_font_size:"35"
+                on_release:
+                    app.screen_capture("add")
+
+            RecycleView:
+                id: customers
+                key_viewclass: 'viewclass'
+                key_size: 'height'
+                pos_hint:{"center_x":.5,"top":.9}
+                RecycleBoxLayout:
+                    id:wali
+                    spacing:dp(10)
+                    padding: dp(10)
+                    default_size: None, dp(55)
+                    default_size_hint: 1, None
+                    size_hint_y: None
+                    height: self.minimum_height
+                    orientation: 'vertical'
 
     MDScreen:
         name:"genesis"
@@ -208,3 +276,32 @@ ScreenManager
     adaptive_height:True
     style:"outlined"
     adaptive_width:True
+
+
+<RowCard>:
+    #orientation: "vertical"
+    radius:9
+    pos_x: .27
+    pos_y: .64
+    height:dp(65)
+    #pos_hint:{"center_x":.5,"top":.8}
+    orientation:"vertical"
+    on_release:
+        app.category = self.name
+        app.screen_capture("setting")
+    FloatLayout:
+        MDIcon:
+            icon:root.icon
+            badge_icon:"cat"
+            font_size:"30sp"
+            theme_text_color:"Custom"
+            text_color: 242/255, 186/255, 133/255, 1
+            pos_hint:{"center_x":.5,"center_y":.5}
+
+        MDLabel:
+            text:root.name
+            font_size:"18sp"
+            #halign:"center"
+            pos_hint:{"center_x":.6,"center_y":.5}
+            theme_text_color: "Custom"
+
