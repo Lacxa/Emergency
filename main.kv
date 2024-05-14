@@ -45,7 +45,8 @@ ScreenManager
                 pos_hint:{'center_x':.5, 'center_y':.2}
                 size:app.size_x/3,app.size_y/6
                 on_release:
-                    app.emergency_call()
+                    app.screen_capture("call")
+
                 FloatLayout:
                     MDIcon:
                         icon:"phone"
@@ -159,6 +160,42 @@ ScreenManager
                 on_release:
                     app.edit_message( sms.text)
                     app.clear_input("sms")
+
+    MDScreen:
+        name:"call"
+        FloatLayout:
+            MDIconButton:
+                icon:"arrow-left"
+                pos_hint:{"center_x":.1,"center_y":.95}
+                user_font_size:"35"
+                on_release:
+                    app.screen_capture("home")
+
+            Deco:
+                size: app.size_x/1.2, app.size_y/3.6
+                pos_hint:{"center_x":.5,"center_y":.77}
+            MDLabel:
+                text:"New call"
+                halign:"center"
+                theme_text_color: "Custom"
+                font_style:"H5"
+                text_color:255/255, 126/255, 71/255, 1
+                pos_hint:{"center_x":.5,"center_y":.87}
+            MDTextField:
+                id:call
+                mode: "rectangle"
+                size_hint: .6, .09
+                hint_text:"Phone number:"
+                pos_hint:{'center_x':.53, 'center_y':.79}
+                font_size: dp(20)
+            MDRaisedButton:
+                id:lgs
+                text: "call"
+                size_hint: .4, .06
+                pos_hint:{'center_x':.65, 'center_y':.69}
+                md_bg_color:255/255, 126/255, 71/255, 1
+                on_release:
+                    app.emergency_call(call.text)
 
     MDScreen:
         name:"add"
