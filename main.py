@@ -1,8 +1,6 @@
-from datetime import datetime
 import json
 import re
 
-import phonenumbers
 from kivy import utils
 from kivymd.uix.card import MDCard
 
@@ -12,12 +10,10 @@ from beem import sms as SM
 from kivy.base import EventLoop
 from kivy.clock import Clock
 from kivy.core.window import Window
-from kivy.properties import StringProperty, NumericProperty, ListProperty
+from kivy.properties import StringProperty, NumericProperty
 from kivymd.app import MDApp
 from kivymd.toast import toast
 from kivymd.uix.textfield import MDTextField
-from phonenumbers import carrier
-from phonenumbers.phonenumberutil import number_type
 
 Window.keyboard_anim_args = {"d": .2, "t": "linear"}
 Window.softinput_mode = "below_target"
@@ -199,9 +195,8 @@ class MainApp(MDApp):
     def location(self):
         pass
 
-    def emergency_call(self):
+    def emergency_call(self, phone):
         from beem import call as CL
-        phone = "0714069014"
 
         CL.Actions.call(CL.Actions(), phone)
 
@@ -224,6 +219,18 @@ class MainApp(MDApp):
         elif key == 27 and self.screens_size == 0:
             toast('Press Home button!')
             return True
+
+    def request_android_permissions(self):
+        from android.permissions import request_permissions, Permission
+
+        def callback(permissions, results):
+            if all([res for res in results]):
+                print("callback. All permissions granted.")
+            else:
+                print("callback. Some permissions refused.")
+
+        request_permissions([Permission.ACCESS_COARSE_LOCATION,
+                             Permission.ACCESS_FINE_LOCATION, Permission.CALL_PHONE], callback)
 
     """ SCREEN FUNCTIONS """
 
