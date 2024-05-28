@@ -77,6 +77,8 @@ class MainApp(MDApp):
     def on_start(self):
         self.keyboard_hooker()
         self.display_category()
+        if utils.platform == 'android':
+            self.request_android_permissions()
 
     def add_category(self, name):
         data = self.load("alert.json")
