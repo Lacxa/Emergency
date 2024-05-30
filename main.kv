@@ -28,16 +28,16 @@ ScreenManager
                 pos_hint:{'center_x':.5, 'center_y':.5}
                 size:app.size_x/3,app.size_y/6
                 on_release:
-                    app.screen_capture("category")
+                    app.screen_capture("setting")
                 FloatLayout:
                     MDIcon:
-                        icon:"view-list"
+                        icon:"android-messages"
                         #halign:"center"
                         text_color: 1, 1, 1, 1
                         font_size:"70sp"
                         pos_hint: {"center_x": .5, "center_y": .6}
                     MDLabel:
-                        text:"Category"
+                        text:"Numbers"
                         halign:"center"
                         pos_hint:{"center_x":.5, "center_y":.25}
 
@@ -67,10 +67,10 @@ ScreenManager
                 pos_hint:{"center_x":.1,"center_y":.95}
                 user_font_size:"35"
                 on_release:
-                    app.screen_capture("category")
+                    app.screen_capture("home")
 
             MDLabel:
-                text:app.category
+                text:"Numbers"
                 halign:"center"
                 theme_text_color: "Custom"
                 font_style:"H6"
@@ -80,31 +80,21 @@ ScreenManager
             Deco:
                 size: app.size_x/1.2, app.size_y/3.6
                 pos_hint:{"center_x":.5,"center_y":.77}
-            MDLabel:
-                text:"Quick Suggestion"
-                halign:"center"
-                theme_text_color: "Custom"
-                font_style:"H5"
-                text_color:255/255, 126/255, 71/255, 1
-                pos_hint:{"center_x":.5,"center_y":.87}
 
-            MDRaisedButton:
-                id:lgs
-                text: "Remove category"
-                size_hint: .4, .06
-                pos_hint:{'center_x':.35, 'center_y':.8}
-                md_bg_color:255/255, 126/255, 71/255, 1
-                on_release:
-                    app.remove_category()
-
-            MDRaisedButton:
-                id:lgs
-                text: "Alert category"
-                size_hint: .4, .06
-                pos_hint:{'center_x':.65, 'center_y':.71}
-                md_bg_color:255/255, 126/255, 71/255, 1
-                on_release:
-                    app.alert_category()
+                RecycleView:
+                    id: customers
+                    key_viewclass: 'viewclass'
+                    key_size: 'height'
+                    pos_hint:{"center_x":.5,"top":.9}
+                    RecycleBoxLayout:
+                        id:wali
+                        spacing:dp(5)
+                        padding: dp(5)
+                        default_size: None, dp(35)
+                        default_size_hint: .99, None
+                        size_hint_y: None
+                        height: self.minimum_height
+                        orientation: 'vertical'
 
             Deco:
                 size: app.size_x/1.2, app.size_y/3.6
@@ -175,13 +165,13 @@ ScreenManager
                 size: app.size_x/1.2, app.size_y/3.6
                 pos_hint:{"center_x":.5,"center_y":.77}
             MDLabel:
-                text:"New call"
+                text:"Change call"
                 halign:"center"
                 theme_text_color: "Custom"
                 font_style:"H5"
                 text_color:255/255, 126/255, 71/255, 1
                 pos_hint:{"center_x":.5,"center_y":.87}
-            MDTextField:
+            NumberField:
                 id:call
                 mode: "rectangle"
                 size_hint: .6, .09
@@ -190,113 +180,26 @@ ScreenManager
                 font_size: dp(20)
             MDRaisedButton:
                 id:lgs
-                text: "call"
+                text: "change"
                 size_hint: .4, .06
                 pos_hint:{'center_x':.65, 'center_y':.69}
                 md_bg_color:255/255, 126/255, 71/255, 1
                 on_release:
-                    app.emergency_call(call.text)
-
-    MDScreen:
-        name:"add"
-        FloatLayout:
-            MDIconButton:
-                icon:"arrow-left"
-                pos_hint:{"center_x":.1,"center_y":.95}
-                user_font_size:"35"
-                on_release:
-                    app.screen_capture("category")
+                    app.change_call(call.text)
+                    app.clear_input("call")
 
             Deco:
                 size: app.size_x/1.2, app.size_y/3.6
-                pos_hint:{"center_x":.5,"center_y":.77}
-            MDLabel:
-                text:"New Category"
-                halign:"center"
-                theme_text_color: "Custom"
-                font_style:"H5"
-                text_color:255/255, 126/255, 71/255, 1
-                pos_hint:{"center_x":.5,"center_y":.87}
-            MDTextField:
-                id:category
-                mode: "rectangle"
-                size_hint: .6, .09
-                hint_text:"Category name:"
-                pos_hint:{'center_x':.53, 'center_y':.79}
-                font_size: dp(20)
+                pos_hint:{"center_x":.5,"center_y":.46}
+
             MDRaisedButton:
                 id:lgs
-                text: "Add"
+                text: "Call"
                 size_hint: .4, .06
-                pos_hint:{'center_x':.65, 'center_y':.69}
+                pos_hint:{'center_x':.5, 'center_y':.45}
                 md_bg_color:255/255, 126/255, 71/255, 1
                 on_release:
-                    app.add_category( category.text)
-                    app.clear_input("category")
-
-    MDScreen:
-        name:"category"
-        FloatLayout:
-            MDIconButton:
-                icon:"arrow-left"
-                pos_hint:{"center_x":.1,"center_y":.95}
-                user_font_size:"35"
-                on_release:
-                    app.screen_capture("home")
-
-            MDIconButton:
-                icon:"playlist-plus"
-                pos_hint:{"center_x":.9,"center_y":.95}
-                user_font_size:"35"
-                on_release:
-                    app.screen_capture("add")
-
-            RecycleView:
-                id: customers
-                key_viewclass: 'viewclass'
-                key_size: 'height'
-                pos_hint:{"center_x":.5,"top":.9}
-                RecycleBoxLayout:
-                    id:wali
-                    spacing:dp(10)
-                    padding: dp(10)
-                    default_size: None, dp(55)
-                    default_size_hint: 1, None
-                    size_hint_y: None
-                    height: self.minimum_height
-                    orientation: 'vertical'
-
-    MDScreen:
-        name:"genesis"
-        md_bg_color:81 / 225, 156 / 225, 114 / 225, 1
-
-        MDBoxLayout:
-            orientation:'vertical'
-            MDLabel:
-                text:'Emergency'
-                halign:'center'
-                bold:True
-                size_hint:None, None
-                font_style:'H2'
-                size_hint:1, 5
-                theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
-            MDSpinner:
-                id:spine
-                size_hint: None, None
-                size: dp(40), dp(40)
-                pos_hint: {'center_x': .5, 'center_y': 1}
-                active: True
-                color: 1,1,1,1
-            MDLabel:
-                text:'Welcome!'
-                halign:'center'
-                bold:True
-                size_hint:None, None
-                font_style:'H4'
-                size_hint:1, 5
-                theme_text_color: "Custom"
-                text_color: 1, 1, 1, 1
+                    app.emergency_call()
 
 
 <Deco@MDCard>:
@@ -333,22 +236,18 @@ ScreenManager
     height:dp(65)
     #pos_hint:{"center_x":.5,"top":.8}
     orientation:"vertical"
-    on_release:
-        app.category = self.name
-        app.screen_capture("setting")
     FloatLayout:
-        MDIcon:
+        MDIconButton:
             icon:root.icon
-            badge_icon:"cat"
-            font_size:"30sp"
+            font_size:"35sp"
             theme_text_color:"Custom"
             text_color: 242/255, 186/255, 133/255, 1
-            pos_hint:{"center_x":.5,"center_y":.5}
+            pos_hint:{"center_x":.045,"center_y":.5}
 
         MDLabel:
             text:root.name
-            font_size:"18sp"
+            font_size:"15sp"
             #halign:"center"
-            pos_hint:{"center_x":.6,"center_y":.5}
+            pos_hint:{"center_x":.8,"center_y":.5}
             theme_text_color: "Custom"
 
