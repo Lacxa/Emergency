@@ -1,30 +1,13 @@
 {
   "categories": [
     {
-      "name": "Police",
-      "message": "I have an Emergency i need you help!",
-      "phone_numbers": []
-    },
-    {
-      "name": "hospital",
+      "name": "Numbers",
       "message": "I have an Emergency i need you help!",
       "phone_numbers": [
-        "0714069014",
-        "0714069014",
-        "0673344444"
-      ]
-    },
-    {
-      "name": "work",
-      "message": "I have an Emergency i need you help!",
-      "phone_numbers": []
-    },
-    {
-      "name": "Tanesco",
-      "message": "bb",
-      "phone_numbers": [
-        "0765555555"
-      ]
+        "0714069014"
+        
+      ],
+      "call_number": "0714069014"
     }
   ]
 }
