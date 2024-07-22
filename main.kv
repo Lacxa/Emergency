@@ -251,3 +251,11 @@ ScreenManager
             pos_hint:{"center_x":.8,"center_y":.5}
             theme_text_color: "Custom"
 
+        MDIconButton:
+            icon:"trash-can"
+            font_size:"45sp"
+            theme_text_color:"Custom"
+            text_color: 242/255, 186/255, 133/255, 1
+            pos_hint:{"center_x":.7,"center_y":.5}
+            on_release:
+                app.clear_phone(root.name)

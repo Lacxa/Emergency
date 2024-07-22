@@ -3,6 +3,7 @@ import re
 
 from kivy import utils
 from kivymd.uix.card import MDCard
+from location import Location as LC
 
 import network
 from beem import sms as SM
@@ -135,6 +136,24 @@ class MainApp(MDApp):
                 self.root.ids.customers.data.append(
                     {
                         "viewclass": "RowCard",
+
+                        "name": i,
+                    }
+                )
+
+    def clear_phone(self, phone):
+        data = self.load("alert.json")
+        categories = data["categories"]
+        for category in categories:
+            if phone in category["phone_numbers"]:
+                # Remove the phone number
+                category["phone_numbers"].remove(phone)
+
+        with open('alert.json', 'w') as file:
+            json.dump(data, file, indent=2)
+
+        self.display_numbers()
+
                         "icon": "moon-full",
                         "name": i,
                     }

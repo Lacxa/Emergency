@@ -2,10 +2,9 @@
   "categories": [
     {
       "name": "Numbers",
-      "message": "I have an Emergency i need you help!",
+      "message": "I need your help",
       "phone_numbers": [
         "0714069014"
-        
       ],
       "call_number": "0714069014"
     }
