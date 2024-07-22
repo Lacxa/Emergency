@@ -7,6 +7,7 @@ from location import Location as LC
 
 import network
 from beem import sms as SM
+from locations import Location as LC
 
 from kivy.base import EventLoop
 from kivy.clock import Clock
@@ -135,6 +136,7 @@ class MainApp(MDApp):
                 self.root.ids.customers.data.append(
                     {
                         "viewclass": "RowCard",
+
                         "name": i,
                     }
                 )
@@ -152,6 +154,10 @@ class MainApp(MDApp):
 
         self.display_numbers()
 
+                        "icon": "moon-full",
+                        "name": i,
+                    }
+                )
 
     def clear_input(self, field_id):
         for input_field_id in ['input']:

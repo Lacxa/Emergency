@@ -31,7 +31,7 @@ ScreenManager
                     app.screen_capture("setting")
                 FloatLayout:
                     MDIcon:
-                        icon:"playlist-edit"
+                        icon:"android-messages"
                         #halign:"center"
                         text_color: 1, 1, 1, 1
                         font_size:"70sp"
@@ -237,6 +237,13 @@ ScreenManager
     #pos_hint:{"center_x":.5,"top":.8}
     orientation:"vertical"
     FloatLayout:
+        MDIconButton:
+            icon:root.icon
+            font_size:"35sp"
+            theme_text_color:"Custom"
+            text_color: 242/255, 186/255, 133/255, 1
+            pos_hint:{"center_x":.045,"center_y":.5}
+
         MDLabel:
             text:root.name
             font_size:"15sp"
