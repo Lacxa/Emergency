@@ -3,6 +3,7 @@ import re
 
 from kivy import utils
 from kivymd.uix.card import MDCard
+from location import Location as LC
 
 import network
 from beem import sms as SM
@@ -74,32 +75,20 @@ class MainApp(MDApp):
     screens_size = NumericProperty(len(screens) - 1)
     current = StringProperty(screens[len(screens) - 1])
 
+    lat, lon = NumericProperty(-6.8059668), NumericProperty(39.2243981)
+    location = StringProperty("")
+
     def on_start(self):
         self.keyboard_hooker()
-        self.display_category()
+        self.display_numbers()
+        #self.fetch_location()
         if utils.platform == 'android':
             self.request_android_permissions()
-
-    def add_category(self, name):
-        data = self.load("alert.json")
-
-        new_category = {
-            "name": name,
-            "message": "I have an Emergency i need you help!",
-            "phone_numbers": []
-        }
-
-        data["categories"].append(new_category)
-        with open('alert.json', 'w') as file:
-            json.dump(data, file, indent=2)
-
-        toast("Successful")
-        self.display_category()
 
     def edit_message(self, new_sms):
         data = self.load("alert.json")
         for category in data['categories']:
-            if category['name'] == self.category:
+            if category['name'] == "Numbers":
                 category['message'] = new_sms
                 break
 
@@ -107,66 +96,62 @@ class MainApp(MDApp):
             json.dump(data, file, indent=2)
         toast("successful")
 
-    def alert_category(self):
-        data = self.load("alert.json")
+    def change_call(self, new_call):
+        if len(new_call) == 10:
+            data = self.load("alert.json")
+            for category in data['categories']:
+                if category['name'] == "Numbers":
+                    category['call_number'] = new_call
+                    break
 
-        for category in data["categories"]:
-            if network.ping_net():
-                if category["name"] == self.category:
-                    phone_numbers = category["phone_numbers"]
-                    if not phone_numbers:
-                        toast("No phone numbers")
-                        return
-                    message = category["message"]
-                    for number in phone_numbers:
-                        if SM.send_sms(number, message):
-                            toast("sent successful")
-            else:
-                toast("check ur network")
-
-    def remove_category(self):
-        data = self.load("alert.json")
-
-        index_to_remove = None
-        for index, category in enumerate(data["categories"]):
-            if category["name"] == self.category:
-                index_to_remove = index
-                break
-
-        if index_to_remove is not None:
-            del data["categories"][index_to_remove]
             with open('alert.json', 'w') as file:
                 json.dump(data, file, indent=2)
             toast("successful")
-            self.display_category()
-            self.screen_capture("category")
         else:
-            print("Category not found.")
+            toast("Wrong number")
 
     def add_phone_number(self, phone):
-        data = self.load("alert.json")
+        if len(phone) == 10:
+            data = self.load("alert.json")
 
-        for category in data["categories"]:
-            if category["name"] == self.category:
-                category["phone_numbers"].append(phone)
-                break
+            for category in data["categories"]:
+                if category["name"] == "Numbers":
+                    category["phone_numbers"].append(phone)
+                    break
 
-        with open('alert.json', 'w') as file:
-            json.dump(data, file, indent=2)
-        toast("successful")
+            with open('alert.json', 'w') as file:
+                json.dump(data, file, indent=2)
+            self.display_numbers()
+            toast("successful")
+        else:
+            toast("rong number")
 
-    def display_category(self):
+    def display_numbers(self):
         self.root.ids.customers.data = {}
         data = self.load("alert.json")
         categories = data["categories"]
         for category in categories:
-            self.root.ids.customers.data.append(
-                {
-                    "viewclass": "RowCard",
-                    "icon": "moon-full",
-                    "name": category["name"],
-                }
-            )
+            for i in category["phone_numbers"]:
+                self.root.ids.customers.data.append(
+                    {
+                        "viewclass": "RowCard",
+                        "name": i,
+                    }
+                )
+
+    def clear_phone(self, phone):
+        data = self.load("alert.json")
+        categories = data["categories"]
+        for category in categories:
+            if phone in category["phone_numbers"]:
+                # Remove the phone number
+                category["phone_numbers"].remove(phone)
+
+        with open('alert.json', 'w') as file:
+            json.dump(data, file, indent=2)
+
+        self.display_numbers()
+
 
     def clear_input(self, field_id):
         for input_field_id in ['input']:
@@ -194,13 +179,18 @@ class MainApp(MDApp):
         else:
             print("Check ur Network")
 
-    def location(self):
-        pass
+    def fetch_location(self):
+        coordinates = [self.lat, self.lon]
+        self.location = LC.get_address(LC(), coordinates)["display_name"]
+        print(self.location)
 
-    def emergency_call(self, phone):
+    def emergency_call(self):
         from beem import call as CL
+        data = self.load("alert.json")
+        for category in data["categories"]:
+            phone = category["call_number"]
 
-        CL.Actions.call(CL.Actions(), phone)
+            CL.Actions.call(CL.Actions(), phone)
 
     """ KEYBOARD INTEGRATION """
 
