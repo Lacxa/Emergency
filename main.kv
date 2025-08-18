@@ -1,5 +1,4 @@
 #:import sm kivy.uix.screenmanager
-#:import orientation plyer.orientation
 ScreenManager
     id:manager
     transition:sm.FadeTransition(duration=.0)
@@ -31,7 +30,7 @@ ScreenManager
                     app.screen_capture("setting")
                 FloatLayout:
                     MDIcon:
-                        icon:"android-messages"
+                        icon:"contacts"
                         #halign:"center"
                         text_color: 1, 1, 1, 1
                         font_size:"70sp"

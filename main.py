@@ -7,7 +7,6 @@ from location import Location as LC
 
 import network
 from beem import sms as SM
-from locations import Location as LC
 
 from kivy.base import EventLoop
 from kivy.clock import Clock
@@ -151,13 +150,7 @@ class MainApp(MDApp):
 
         with open('alert.json', 'w') as file:
             json.dump(data, file, indent=2)
-
         self.display_numbers()
-
-                        "icon": "moon-full",
-                        "name": i,
-                    }
-                )
 
     def clear_input(self, field_id):
         for input_field_id in ['input']:
@@ -231,6 +224,7 @@ class MainApp(MDApp):
                              Permission.ACCESS_FINE_LOCATION, Permission.CALL_PHONE], callback)
 
     """ SCREEN FUNCTIONS """
+
 
     def screen_capture(self, screen):
         sm = self.root
